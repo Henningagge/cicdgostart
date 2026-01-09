@@ -4,29 +4,39 @@ import (
 	"net/http"
 	"testing"
 )
-
-func testApi(t *testing.T){
+ 
+func TestGetAPIKey(t *testing.T) {
 	testCases := []struct {
-		name string
-		headers http.Header
-		expectedAPIKey  string
-		exPectedError error
+		name          string
+		headers       http.Header
+		expectedAPIKey string
+		expectedError error
 	}{
 		{
-			name: "Valid Key",
-			headers: http.Header{"Authorization": {"ApiKey 12345"}},
-			expectedAPIKey: "dskfsalkfdlsak", 
-			exPectedError: nil,
+			name:          "Valid API Ke",
+			headers:       http.Header{"Authorization": {"ApiKey 12345"}},
+			expectedAPIKey: "1235",
+			expectedError: nil,
 		},
+		{
+			name:          "No Authorization Header",
+			headers:       http.Header{},
+			expectedAPIKey: "",
+			expectedError: ErrNoAuthHeaderIncluded,
+		},
+		
 	}
-	for _, tc := range testCases{
-		t.Run(tc.name, func(t *testing.T){
-			ApiKey, err := GetAPIKey(tc.headers)
-			if err != tc.exPectedError{
-				t.Errorf("Expected error: %v, got: %v", tc.exPectedError, err)
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			apiKey, err := GetAPIKey(tc.headers)
+
+			if err != tc.expectedError {
+				t.Errorf("Expected error: %v, got: %v", tc.expectedError, err)
 			}
-			if ApiKey != tc.expectedAPIKey{
-				t.Errorf("Expected API Key: %s, got: %s", tc.expectedAPIKey, ApiKey)
+
+			if apiKey != tc.expectedAPIKey {
+				t.Errorf("Expected API Key: %s, got: %s", tc.expectedAPIKey, apiKey)
 			}
 		})
 	}
