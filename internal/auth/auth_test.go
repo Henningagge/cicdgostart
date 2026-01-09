@@ -4,27 +4,26 @@ import (
 	"net/http"
 	"testing"
 )
- 
+
 func TestGetAPIKey(t *testing.T) {
 	testCases := []struct {
-		name          string
-		headers       http.Header
+		name           string
+		headers        http.Header
 		expectedAPIKey string
-		expectedError error
+		expectedError  error
 	}{
 		{
-			name:          "Valid API Ke",
-			headers:       http.Header{"Authorization": {"ApiKey 12345"}},
+			name:           "Valid API Ke",
+			headers:        http.Header{"Authorization": {"ApiKey 12345"}},
 			expectedAPIKey: "12345",
-			expectedError: nil,
+			expectedError:  nil,
 		},
 		{
-			name:          "No Authorization Header",
-			headers:       http.Header{},
+			name:           "No Authorization Header",
+			headers:        http.Header{},
 			expectedAPIKey: "",
-			expectedError: ErrNoAuthHeaderIncluded,
+			expectedError:  ErrNoAuthHeaderIncluded,
 		},
-		
 	}
 
 	for _, tc := range testCases {
